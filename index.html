@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playlist Gospel Local</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    audio { max-width: 300px; }
+    .list-group-item { gap: 20px; }
+    .badge { font-size: 0.9em; }
+    #letra-musica {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      white-space: pre-line;
+    }
+    .verso { opacity: 0.5; transition: opacity 0.3s ease; }
+    .verso.ativo { opacity: 1; font-weight: bold; color: #0d6efd; }
+  </style>
+</head>
+<body class="bg-warning">
+  <div class="container py-4">
+    <h1 class="text-center mb-4">🎵 Playlist Gospel Local</h1>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <input type="text" id="busca" class="form-control" placeholder="Buscar música ou cantor...">
+      </div>
+      <div class="col-md-6">
+        <select id="categoria" class="form-select">
+          <option value="">Todas as Categorias</option>
+          <option value="Adoração">Adoração</option>
+          <option value="Louvor">Louvor</option>
+          <option value="Pentecostal">Pentecostal</option>
+        </select>
+      </div>
+    </div>
+
+    <ul class="list-group" id="playlist"></ul>
+
+    <div id="letra-musica" class="mt-4 d-none"></div>
+  </div>
+
+  <script>
+    const musicas = [
+      {
+        titulo: "O Sonho de José",
+        cantor: "Mattos Nascimento",
+        categoria: "Adoração",
+        arquivo: "mattosnascimento-o-sonho-de-jose.mp3",
+        letraSincronizada: [
+          { tempo: 0, verso: "O sonho de José foi maior que a humilhação" },
+          { tempo: 5, verso: "Deus revelou mistérios ao seu coração" },
+          { tempo: 10, verso: "Mesmo sendo vendido e até caluniado" },
+          { tempo: 15, verso: "Ele não abriu mão do chamado" }
+        ]
+      },
+      {
+        titulo: "Sou feliz",
+        cantor: "Mattos Nascimento",
+        categoria: "Adoração",
+        arquivo: "mattosnascimento-sou-feliz.mp3",
+        letraSincronizada: [
+          { tempo: 0, verso: "Sou feliz com Jesus, meu Senhor" },
+          { tempo: 5, verso: "Mesmo em dor, há consolação" },
+          { tempo: 10, verso: "Na aflição, Ele me dá Seu amor" },
+          { tempo: 15, verso: "Sou feliz, sim, feliz com Jesus!" }
+        ]
+      },
+      {
+        titulo: "adorarei",
+        cantor: "kellen-byanca-adorarei",
+        categoria: "Adoração",
+        arquivo: "kellen-byanca-adorarei.mp3",
+        letraSincronizada: [
+          { tempo: 0, verso: "Sou feliz com Jesus, meu Senhor" },
+          { tempo: 5, verso: "Mesmo em dor, há consolação" },
+          { tempo: 10, verso: "Na aflição, Ele me dá Seu amor" },
+          { tempo: 15, verso: "Sou feliz, sim, feliz com Jesus!" }
+        ]
+      },
+      {
+        titulo: "me sondas",
+        cantor: "Carlos A. Moyses",
+        categoria: "Adoração",
+        arquivo: "eu-sei-que-tu-me-sondas.mp3",
+        letraSincronizada: [
+          { tempo: 0, verso: "Sou feliz com Jesus, meu Senhor" },
+          { tempo: 5, verso: "Mesmo em dor, há consolação" },
+          { tempo: 10, verso: "Na aflição, Ele me dá Seu amor" },
+          { tempo: 15, verso: "Sou feliz, sim, feliz com Jesus!" }
+        ]
+      },
+      {
+        titulo: "sou um milagre",
+        cantor: "Carlos A. Moyses",
+        categoria: "Adoração",
+        arquivo: "sou-um-milagre.mp3",
+        letraSincronizada: [
+          { tempo: 0, verso: "Sou feliz com Jesus, meu Senhor" },
+          { tempo: 5, verso: "Mesmo em dor, há consolação" },
+          { tempo: 10, verso: "Na aflição, Ele me dá Seu amor" },
+          { tempo: 15, verso: "Sou feliz, sim, feliz com Jesus!" }
+        ]
+      },
+      {
+        titulo: "renova-me",
+        cantor: "Carlos A. Moyses",
+        categoria: "Adoração",
+        arquivo: "renova-me.mp3",
+        letraSincronizada: [
+        { tempo: 0, verso: "Renova-me, Senhor Jesus" },
+        { tempo: 5, verso: "Já não quero ser igual" },
+        { tempo: 10, verso: "Renova-me, Senhor Jesus" },
+        { tempo: 15, verso: "Põe em mim teu coração" },
+        { tempo: 20, verso: "Porque tudo que há dentro de mim" },
+        { tempo: 25, verso: "Necessita ser mudado, Senhor" },
+        { tempo: 30, verso: "Porque tudo que há dentro do meu coração" },
+        { tempo: 35, verso: "Necessita mais de Ti" },
+        { tempo: 40, verso: "Renova-me, Senhor Jesus" },
+        { tempo: 45, verso: "Já não quero ser igual" },
+        { tempo: 50, verso: "Renova-me, Senhor Jesus" },
+        { tempo: 55, verso: "Põe em mim teu coração" },
+        { tempo: 60, verso: "Porque tudo que há dentro de mim" },
+        { tempo: 65, verso: "Necessita ser mudado, Senhor" },
+        { tempo: 70, verso: "Por que tudo que há dentro do meu coração" },
+        { tempo: 75, verso: "Necessita mais de Ti" },
+        { tempo: 80, verso: "Necessita mais de Ti" },
+        { tempo: 85, verso: "Necessita mais" },
+        { tempo: 90, verso: "De Ti" }
+      ]
+
+      }
+    ];
+
+    const elementos = {
+      busca: document.getElementById('busca'),
+      categoria: document.getElementById('categoria'),
+      playlist: document.getElementById('playlist'),
+      letra: document.getElementById('letra-musica')
+    };
+
+    function normalizarTexto(texto) {
+      return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function filtrarMusicas() {
+      const termoBusca = normalizarTexto(elementos.busca.value);
+      const categoriaSelecionada = elementos.categoria.value;
+
+      return musicas.filter(musica => {
+        const titulo = normalizarTexto(musica.titulo);
+        const cantor = normalizarTexto(musica.cantor);
+        const buscaOK = titulo.includes(termoBusca) || cantor.includes(termoBusca);
+        const categoriaOK = !categoriaSelecionada || musica.categoria === categoriaSelecionada;
+        return buscaOK && categoriaOK;
+      });
+    }
+
+    function renderizarPlaylist() {
+      const musicasFiltradas = filtrarMusicas();
+      elementos.playlist.innerHTML = "";
+
+      musicasFiltradas.forEach((musica, index) => {
+        const item = document.createElement('li');
+        item.className = 'list-group-item d-flex align-items-center justify-content-between flex-wrap';
+
+        const info = document.createElement('div');
+        info.innerHTML = `<strong>${musica.titulo}</strong> - ${musica.cantor} <span class="badge bg-secondary">${musica.categoria}</span>`;
+
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = musica.arquivo;
+
+        let intervaloKaraoke;
+
+        audio.addEventListener('play', () => {
+          exibirLetraSincronizada(musica.letraSincronizada, audio);
+          clearInterval(intervaloKaraoke);
+          intervaloKaraoke = setInterval(() => atualizarLetra(audio.currentTime, musica.letraSincronizada), 300);
+        });
+
+        audio.addEventListener('pause', () => clearInterval(intervaloKaraoke));
+        audio.addEventListener('ended', () => clearInterval(intervaloKaraoke));
+
+        item.appendChild(info);
+        item.appendChild(audio);
+        elementos.playlist.appendChild(item);
+      });
+    }
+
+    function exibirLetraSincronizada(letras, audio) {
+      elementos.letra.classList.remove('d-none');
+      elementos.letra.innerHTML = letras.map((l, i) =>
+        `<div class="verso" data-index="${i}">${l.verso}</div>`
+      ).join('');
+    }
+
+    function atualizarLetra(tempoAtual, letras) {
+      letras.forEach((linha, index) => {
+        const proxima = letras[index + 1];
+        if (tempoAtual >= linha.tempo && (!proxima || tempoAtual < proxima.tempo)) {
+          document.querySelectorAll('.verso').forEach(v => v.classList.remove('ativo'));
+          const versoAtivo = document.querySelector(`.verso[data-index="${index}"]`);
+          if (versoAtivo) versoAtivo.classList.add('ativo');
+        }
+      });
+    }
+
+    elementos.busca.addEventListener('input', renderizarPlaylist);
+    elementos.categoria.addEventListener('change', renderizarPlaylist);
+
+    // Não mostrar nenhuma música ao iniciar
+    elementos.playlist.innerHTML = "";
+    elementos.letra.classList.add('d-none');
+  </script>
+</body>
+</html>
